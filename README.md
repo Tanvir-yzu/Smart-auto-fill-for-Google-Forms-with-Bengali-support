@@ -176,7 +176,7 @@ We welcome contributions! Please follow these guidelines:
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/your-username/autofill-extension.git
+   git clone https://github.com/Tanvir-yzu/Smart-auto-fill-for-Google-Forms-with-Bengali-support.git
    cd autofill-extension
    ```
 
