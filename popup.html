@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoFill Pro - Google Forms</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 400px;
+            min-height: 600px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: #e0e7ff;
+        }
+        
+        .container {
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+        }
+        
+        h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .subtitle {
+            font-size: 12px;
+            color: #818cf8;
+        }
+        
+        .form-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #818cf8;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        label {
+            display: block;
+            font-size: 12px;
+            color: #a5b4fc;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #6366f1;
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        input::placeholder {
+            color: #64748b;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .preset-btn {
+            padding: 10px;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 8px;
+            color: #e0e7ff;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .preset-btn:hover {
+            background: rgba(99, 102, 241, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .preset-btn.active {
+            background: rgba(99, 102, 241, 0.5);
+            border-color: #6366f1;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #e0e7ff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status.success {
+            display: flex;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+        }
+        
+        .status.error {
+            display: flex;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+        
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        
+        input[type="checkbox"] {
+            width: auto;
+            accent-color: #6366f1;
+        }
+        
+        .speed-control {
+            margin-top: 12px;
+        }
+        
+        .speed-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            accent-color: #6366f1;
+        }
+        
+        .info-text {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        
+        .field-count {
+            background: rgba(99, 102, 241, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #818cf8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">⚡</div>
+            <h1>AutoFill Pro</h1>
+            <div class="subtitle">Google Forms Auto-Fill</div>
+        </div>
+        
+        <div class="preset-buttons">
+            <div class="preset-btn active" data-preset="today">📅 Today's Date</div>
+            <div class="preset-btn" data-preset="custom">✏️ Custom</div>
+        </div>
+        
+        <div class="form-section">
+            <div class="section-title">
+                <span>📋</span> Form Data <span class="field-count">7 fields</span>
+            </div>
+            
+            <div class="form-group">
+                <label>তোমার নাম (Your Name) *</label>
+                <input type="text" id="studentName" placeholder="Enter your name">
+            </div>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="date" id="dateField">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="emailField" placeholder="auto-filled">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="section-title">
+                <span>🎓</span> Course Details
+            </div>
+            
+            <div class="form-group">
+                <label>কোর্স (Course) *</label>
+                <select id="courseSelect">
+                    <option value="">Select Course</option>
+                    <option value="Machine Learning" selected>Machine Learning</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>মেন্টর (Mentor) *</label>
+                <select id="mentorSelect">
+                    <option value="">Select Mentor</option>
+                    <option value="Mentor Avishek - Tech Titans">Mentor Avishek - Tech Titans</option>
+                    <option value="Mentor Sakib - Bit Masters">Mentor Sakib - Bit Masters</option>
+                    <option value="Mentor Shabbir - Loop Legends">Mentor Shabbir - Loop Legends</option>
+                    <option value="Mentor Adil - Hex Heroes">Mentor Adil - Hex Heroes</option>
+                    <option value="Mentor Ratin - Stack Storm">Mentor Ratin - Stack Storm</option>
+                    <option value="Mentor Akash - Byte Brigade">Mentor Akash - Byte Brigade</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>উইক (Week) *</label>
+                <select id="weekSelect">
+                    <option value="">Select Week</option>
+                    <option value="Week 1">Week 1</option>
+                    <option value="Week 2">Week 2</option>
+                    <option value="Week 3">Week 3</option>
+                    <option value="Week 4">Week 4</option>
+                    <option value="Week 5">Week 5</option>
+                    <option value="Week 6">Week 6</option>
+                    <option value="Week 7">Week 7</option>
+                    <option value="Week 8" selected>Week 8</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="section-title">
+                <span>📚</span> Progress
+            </div>
+            
+            <div class="form-group">
+                <label>মডিউল (Module Completed) *</label>
+                <input type="text" id="moduleField" placeholder="e.g., Module 1 - Introduction to ML">
+            </div>
+            
+            <div class="form-group">
+                <label>সময় (Hours Spent) *</label>
+                <select id="hoursSelect">
+                    <option value="">Select Hours</option>
+                    <option value="১ ঘন্টা+">১ ঘন্টা+ (1+ hours)</option>
+                    <option value="২ ঘন্টা+">২ ঘন্টা+ (2+ hours)</option>
+                    <option value="৩ ঘন্টা+" selected>৩ ঘন্টা+ (3+ hours)</option>
+                    <option value="৪ ঘন্টা+">৪ ঘন্টা+ (4+ hours)</option>
+                    <option value="৫ ঘন্টা++">৫ ঘন্টা++ (5+ hours)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="section-title">
+                <span>⚙️</span> Options
+            </div>
+            
+            <div class="speed-control">
+                <label>Typing Speed</label>
+                <input type="range" id="speed" min="1" max="5" value="4">
+                <div class="speed-labels">
+                    <span>Instant</span>
+                    <span>Fast</span>
+                    <span>Normal</span>
+                    <span>Slow</span>
+                    <span>Dramatic</span>
+                </div>
+            </div>
+            
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="animate" checked>
+                <label for="animate" style="margin:0;cursor:pointer;">Animate typing</label>
+            </div>
+            
+            <div class="checkbox-wrapper">
+                <input type="checkbox" id="autoSubmit">
+                <label for="autoSubmit" style="margin:0;cursor:pointer;">Auto-submit form</label>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn-secondary" id="saveBtn">
+                <span>💾</span> Save
+            </button>
+            <button class="btn-primary" id="fillBtn">
+                <span>✨</span> Auto Fill
+            </button>
+        </div>
+        
+        <div id="status" class="status"></div>
+        
+        <div class="info-text">
+            💡 Tip: Make sure you're on the Google Form page before clicking "Auto Fill". The extension will automatically detect and fill all fields.
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
